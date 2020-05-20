@@ -3,13 +3,28 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose') //載入mongoose
 const exphbs = require('express-handlebars')
-const Todo = require('./models/todo')
+
+const Records = require('./models/Record')
+const categorys = require('./models/category')
 // 引用 body-parser
 const bodyParser = require('body-parser')
 // 載入 method-override
 const methodOverride = require('method-override') 
 // 引用路由器
 const PORT = process.env.PORT || 3000
+
+
+mongoose.connect('mongodb://localhost/expense-tracker', { useNewUrlParser: true, useUnifiedTopology: true })
+// 取得資料庫連線狀態
+const db = mongoose.connection
+// 連線異常
+db.on('error', () => {
+  console.log('mongodb error!')
+})
+// 連線成功
+db.once('open', () => {
+  console.log('mongodb connected!')
+})
 
 
 //設定前端模板引擎
