@@ -52,6 +52,34 @@ app.post('/records', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//進入ED路由
+app.get('/records/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Record.findById(id)
+    .lean()
+    .then((record) => res.render('edit', { record }))
+    .catch(error => console.log(error))
+})
+
+//儲存ED路由
+app.put('/records/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  const date = req.body.date
+  const category = req.body.category
+  const amount = req.body.amount
+  return Record.findById(id)
+    .then(record => {
+      record.name = name
+      record.date = date
+      record.category = category
+      record.amount = amount
+      return todo.save()
+    })
+    .then(()=> res.redirect(`records/${id}`))
+    .catch(error => console.log(error))
+})
+
 //設定路由監聽器
 app.listen(PORT, () => {
   console.log('App is running on http://localhost:3000')

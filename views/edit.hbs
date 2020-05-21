@@ -1,0 +1,43 @@
+<div class="container h-200 mt-5 col-8">
+  <form action="/records/:id/edit" method="post" class="needs-validation">
+
+    <h3>請修改你的支出</h3>
+
+   <div class="input-group mb-3 ">
+      <div class="input-group-prepend">
+        <span class="input-group-text">名稱</span>
+      </div>
+      <input type="text" class="form-control" value="{{ record.name }}" name="name">
+    </div>
+
+    <div class="input-group mb-3 ">
+      <div class="input-group-prepend">
+        <span class="input-group-text">日期</span>
+      </div>
+      <input type="text" class="form-control"value="{{ record.date }}" name="date">
+    </div>
+
+    <div class="input-group mb-3 ">
+      <div class="input-group-prepend">
+        <span class="input-group-text">類別</span>
+      </div>
+      <select class="form-control" name="category">
+        <option>請修改類別</option>
+        <option value="01">家居物業</option>
+        <option value="02">交通出行</option>
+        <option value="03">休閒娛樂</option>
+        <option value="04">餐飲食品</option>
+        <option value="05">其他</option>
+      </select>
+    </div>
+
+    <div class="input-group mb-3 ">
+      <div class="input-group-prepend">
+        <span class="input-group-text">金額</span>
+      </div>
+      <input type="text" class="form-control" value="{{ record.amount }}" name="amount">
+    </div>
+    
+    <button type="submit" class="btn btn-info mb-5">儲存</button>
+  </form>
+</div>
