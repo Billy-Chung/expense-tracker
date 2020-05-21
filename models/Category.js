@@ -3,16 +3,13 @@ const Schema = mongoose.Schema
 
 const categorySchema = new Schema({  
     name: {
-        type: String,
-        default: true
+        type: String        
       },
       id: {
-        type: String,
-        default:true
-      },
+        type: String   
+      },     
       icon:{
-        type: String,
-        default:true
+        type: String
       }
 })
 

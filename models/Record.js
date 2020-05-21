@@ -5,7 +5,7 @@ const RecordSchema = new Schema({
     name: String,// 支出名稱
     category:String,  
     date: String, //日期
-    amount: String, //金      
+    amount: Number, //金      
 
 })
 

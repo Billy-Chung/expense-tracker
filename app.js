@@ -31,12 +31,22 @@ app.set('view engine', 'hbs')
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))
 
+
 // 首頁
 app.get('/', (req, res) => {
-  Record.find() // 取出 Todo model 裡的所有資料
-    .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
-    .then(records => res.render('index', { records })) // 將資料傳給 index 樣板
-    .catch(error => console.error(error)) // 錯誤處理
+  let totalAmount = 0
+  Record.find()
+    .lean()
+    .then( //資料庫裡的每個項目的金額全部加總，帶入參數totalAmount
+      items => {
+        items.forEach(item=>{
+          totalAmount += item.amount
+        })
+        return items
+      }
+    )
+    .then(records => res.render('index', { records, totalAmount }))
+    .catch(error => console.log(error))
 })
 
 //新增頁面
@@ -87,6 +97,24 @@ app.delete('/records/:id/delete', (req, res) => {
     .then(record => record.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
+})
+
+//總金額
+app.get('/', (req, res) => {
+  let totalAmount = 0
+  Record.find()
+    .lean()
+    .then( //資料庫裡的每個項目的金額全部加總，帶入參數totalAmount
+      items => {
+        items.forEach(item=>{
+          totalAmount += item.amount
+        })
+        return totalAmount
+      }
+    )
+    .then(records => res.render('index', { records, totalAmount }))
+    .catch(error => console.log(error))
+    
 })
 
 //設定路由監聽器
