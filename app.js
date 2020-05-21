@@ -3,9 +3,8 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose') //載入mongoose
 const exphbs = require('express-handlebars')
-
-const Records = require('./models/Record')
-const categorys = require('./models/category')
+const Record = require('./models/Record')//載入資料
+const Category = require('./models/Category')//載入資料
 // 引用 body-parser
 const bodyParser = require('body-parser')
 // 載入 method-override
@@ -36,8 +35,12 @@ app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))
 
 // 將 request 導入路由器
 app.get('/', (req, res) => {
-    res.render('index')
+    Record.find() // 取出 Todo model 裡的所有資料
+      .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
+      .then(records => res.render('index', { records })) // 將資料傳給 index 樣板
+      .catch(error => console.error(error)) // 錯誤處理
   })
+  
 
 //設定路由監聽器
 app.listen(PORT, () => {

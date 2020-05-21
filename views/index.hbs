@@ -1,1 +1,50 @@
-<h1>123</h1>
+<div class="container mt-5">
+  <div class="row">
+    <div class="form-group col-4 m-auto">
+      <select class="form-control"  name = 'category'>
+        <option value="/">類別</option>
+        <option value="/records/01/filter">居家物業</option> 
+        <option value="/records/02/filter">交通出行</option> 
+        <option value="/records/03/filter">休閒娛樂</option> 
+        <option value="/records/04/filter">餐飲食品</option>
+        <option value="/records/05/filter">其他</option>          
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <h4 >總金額：</h3>    
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+      {{#each records}}
+      <div class="list-group">
+        <div class="list-group-item col-12 col-md-10">
+          <div class="row ">            
+            <div class="mx-2 mb-0" style="display: inline; vertical-align: middle;">
+              {{this.name}}
+              <p>{{this.date}}</p>
+            </div>
+            <div class="ml-1">
+              <p>{{this.amount}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-auto btn-section">
+          <a class="btn btn-success  mr-2" href="./records/{{ this._id }}/edit">edit</a>
+          <form action="./records/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;">
+            <button class="btn btn-danger" type="submit">delete</button>
+          </form>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="expense">
+    <a class="btn btn-outline-warning m-5 expenseBtn col-6" href="/records/new">新增支出</a>
+  </div>
+
+</div>
