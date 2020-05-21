@@ -84,9 +84,9 @@ app.put('/records/:id/edit', (req, res) => {
       record.date = date
       record.category = category
       record.amount = amount
-      return todo.save()
+      return record.save()
     })
-    .then(()=> res.redirect(`records/${id}`))
+    .then(()=> res.redirect('/'))
     .catch(error => console.log(error))
 })
 
