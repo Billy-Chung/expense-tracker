@@ -8,10 +8,9 @@ const Category = require('./models/Category')//載入資料
 // 引用 body-parser
 const bodyParser = require('body-parser')
 // 載入 method-override
-const methodOverride = require('method-override') 
+const methodOverride = require('method-override')
 // 引用路由器
 const PORT = process.env.PORT || 3000
-
 
 mongoose.connect('mongodb://localhost/expense-tracker', { useNewUrlParser: true, useUnifiedTopology: true })
 // 取得資料庫連線狀態
@@ -25,7 +24,6 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-
 //設定前端模板引擎
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
@@ -33,14 +31,26 @@ app.set('view engine', 'hbs')
 // 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))
 
-// 將 request 導入路由器
+// 首頁
 app.get('/', (req, res) => {
-    Record.find() // 取出 Todo model 裡的所有資料
-      .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
-      .then(records => res.render('index', { records })) // 將資料傳給 index 樣板
-      .catch(error => console.error(error)) // 錯誤處理
-  })
-  
+  Record.find() // 取出 Todo model 裡的所有資料
+    .lean() // 把 Mongoose 的 Model 物件轉換成乾淨的 JavaScript 資料陣列
+    .then(records => res.render('index', { records })) // 將資料傳給 index 樣板
+    .catch(error => console.error(error)) // 錯誤處理
+})
+
+//新增頁面
+app.get('/records/new', (req, res) => {
+  return res.render('new')
+})
+
+//新增路由
+app.post('/records', (req, res) => {
+  const { name, date, category, amount } = req.body
+  return Record.create({ name, date, category, amount })     // 存入資料庫
+    .then(() => res.redirect('/')) // 新增完成後導回首頁
+    .catch(error => console.log(error))
+})
 
 //設定路由監聽器
 app.listen(PORT, () => {
