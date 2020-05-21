@@ -35,12 +35,12 @@
 
         <div class="col-auto btn-section">
           <a class="btn btn-success  mr-2" href="./records/{{ this._id }}/edit">edit</a>
-          <form action="./records/{{ this._id }}?_method=DELETE" method="POST" style="display: inline;">
+          <form action="./records/{{ this._id }}/delete?_method=DELETE" method="POST" style="display: inline;">
             <button class="btn btn-danger" type="submit">delete</button>
           </form>
         </div>
       </div>
-      
+
       {{/each}}
     </div>
   </div>

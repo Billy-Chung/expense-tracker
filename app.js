@@ -80,6 +80,15 @@ app.put('/records/:id/edit', (req, res) => {
     .catch(error => console.log(error))
 })
 
+//刪除路由
+app.delete('/records/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Record.findById(id)
+    .then(record => record.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
+
 //設定路由監聽器
 app.listen(PORT, () => {
   console.log('App is running on http://localhost:3000')
