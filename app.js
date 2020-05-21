@@ -117,6 +117,22 @@ app.get('/', (req, res) => {
     
 })
 
+//篩選功能
+app.get('/records/:id/sort', (req, res) => {
+  const id = req.params.id
+  let totalAmount = 0
+  Record.find({category: id})
+    .lean()
+    .then(items => {
+      items.forEach(item=>{
+        totalAmount += item.amount
+      })
+      return items
+    })
+    .then(records => res.render('index', { records, totalAmount, id }))
+    .catch(error => console.log(error))
+})
+
 //設定路由監聽器
 app.listen(PORT, () => {
   console.log('App is running on http://localhost:3000')
