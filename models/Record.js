@@ -3,9 +3,11 @@ const Schema = mongoose.Schema
 
 const RecordSchema = new Schema({  
     name: String,// 支出名稱
-    category:String,  
+    icon: String,
+    category:Number,  
     date: String, //日期
-    amount: Number, //金      
+    amount: Number, //金  
+    icon:String,    
 
 })
 

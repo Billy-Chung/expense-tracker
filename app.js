@@ -5,6 +5,7 @@ const mongoose = require('mongoose') //載入mongoose
 const exphbs = require('express-handlebars')
 const Record = require('./models/Record')//載入資料
 const Category = require('./models/Category')//載入資料
+const Handlebars = require('handlebars')
 // 引用 body-parser
 const bodyParser = require('body-parser')
 // 載入 method-override
@@ -35,17 +36,30 @@ app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))
 // 首頁
 app.get('/', (req, res) => {
   let totalAmount = 0
+  
   Record.find()
     .lean()
     .then( //資料庫裡的每個項目的金額全部加總，帶入參數totalAmount
       items => {
         items.forEach(item=>{
           totalAmount += item.amount
+        
+          let cat_id =  item.category
+          let cat_obj = Category.find({id: cat_id}).lean().then(
+            xxx=>{
+             item.icon = xxx[0].icon
+             return item
+            }
+          )
+ 
+       
+         
         })
         return items
       }
     )
-    .then(records => res.render('index', { records, totalAmount }))
+    .then()
+    .then(records => res.render('index', { records, totalAmount}))
     .catch(error => console.log(error))
 })
 
@@ -132,6 +146,7 @@ app.get('/records/:id/sort', (req, res) => {
     .then(records => res.render('index', { records, totalAmount, id }))
     .catch(error => console.log(error))
 })
+
 
 //設定路由監聽器
 app.listen(PORT, () => {
