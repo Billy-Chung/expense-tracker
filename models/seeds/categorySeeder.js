@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
-const Category = require('../Category') // 載入  model
-mongoose.connect('mongodb://localhost/expense-tracker', { useNewUrlParser: true, useUnifiedTopology: true })
-const db = mongoose.connection
+const Category = require('../Category')
+
+const db = require('../../config/mongoose')
 const categoryList = [
   { name: '家居物業',id: '01' , icon:'<i class="fas fa-home"></i>'},
   { name: '交通出行',id: '02', icon:'<i class="fas fa-shuttle-van"></i>'},
@@ -9,9 +8,6 @@ const categoryList = [
   { name: '餐飲食品',id: '04', icon:'<i class="fas fa-utensils"></i>' },
   { name: '其他',id: '05', icon:'<i class="fas fa-pen"></i>'}
 ]
-db.on('error', () => {
-  console.log('mongodb error!')
-})
 db.once('open', () => {
   console.log('mongodb connected!')  
  

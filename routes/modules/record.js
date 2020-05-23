@@ -3,7 +3,6 @@ const router = express.Router()
 const Record = require('../../models/Record')//載入資料
 const Category = require('../../models/Category')//載入資料
 
-
 //新增頁面
 router.get('/new', (req, res) => {
     return res.render('new')
@@ -47,7 +46,7 @@ router.put('/:id', (req, res) => {
 
 //刪除路由
 router.delete('/:id', (req, res) => {
-    const id = req.params.id
+    const id = req.params.id        
     return Record.findById(id)
         .then(record => record.remove())
         .then(() => res.redirect('/'))
