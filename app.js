@@ -86,7 +86,7 @@ app.get('/records/:id/edit', (req, res) => {
 })
 
 //儲存ED路由
-app.put('/records/:id/edit', (req, res) => {
+app.put('/records/:id/', (req, res) => {
   const id = req.params.id
   const name = req.body.name
   const date = req.body.date
@@ -105,7 +105,7 @@ app.put('/records/:id/edit', (req, res) => {
 })
 
 //刪除路由
-app.delete('/records/:id/delete', (req, res) => {
+app.delete('/records/:id/', (req, res) => {
   const id = req.params.id
   return Record.findById(id)
     .then(record => record.remove())
