@@ -5,11 +5,18 @@ const mongoose = require('mongoose') //載入mongoose
 const exphbs = require('express-handlebars')
 const Record = require('./models/Record')//載入資料
 const Category = require('./models/Category')//載入資料
-const Handlebars = require('handlebars')
 // 引用 body-parser
 const bodyParser = require('body-parser')
 // 載入 method-override
 const methodOverride = require('method-override')
+
+// 引用路由器
+const routes = require('./routes')
+// 將 request 導入路由器
+// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
+app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))
+app.use(routes)
+
 // 引用路由器
 const PORT = process.env.PORT || 3000
 
@@ -29,123 +36,6 @@ db.once('open', () => {
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
-// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
-app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))
-
-
-// 首頁
-app.get('/', (req, res) => {
-  let totalAmount = 0
-  
-  Record.find()
-    .lean()
-    .then( //資料庫裡的每個項目的金額全部加總，帶入參數totalAmount
-      items => {
-        items.forEach(item=>{
-          totalAmount += item.amount
-        
-          let cat_id =  item.category
-          let cat_obj = Category.find({id: cat_id}).lean().then(
-            xxx=>{
-             item.icon = xxx[0].icon
-             return item
-            }
-          )
- 
-       
-         
-        })
-        return items
-      }
-    )
-    .then()
-    .then(records => res.render('index', { records, totalAmount}))
-    .catch(error => console.log(error))
-})
-
-//新增頁面
-app.get('/records/new', (req, res) => {
-  return res.render('new')
-})
-
-//新增路由
-app.post('/records', (req, res) => {
-  const { name, date, category, amount } = req.body
-  return Record.create({ name, date, category, amount })     // 存入資料庫
-    .then(() => res.redirect('/')) // 新增完成後導回首頁
-    .catch(error => console.log(error))
-})
-
-//進入ED路由
-app.get('/records/:id/edit', (req, res) => {
-  const id = req.params.id
-  return Record.findById(id)
-    .lean()
-    .then((record) => res.render('edit', { record }))
-    .catch(error => console.log(error))
-})
-
-//儲存ED路由
-app.put('/records/:id/', (req, res) => {
-  const id = req.params.id
-  const name = req.body.name
-  const date = req.body.date
-  const category = req.body.category
-  const amount = req.body.amount
-  return Record.findById(id)
-    .then(record => {
-      record.name = name
-      record.date = date
-      record.category = category
-      record.amount = amount
-      return record.save()
-    })
-    .then(()=> res.redirect('/'))
-    .catch(error => console.log(error))
-})
-
-//刪除路由
-app.delete('/records/:id/', (req, res) => {
-  const id = req.params.id
-  return Record.findById(id)
-    .then(record => record.remove())
-    .then(() => res.redirect('/'))
-    .catch(error => console.log(error))
-})
-
-//總金額
-app.get('/', (req, res) => {
-  let totalAmount = 0
-  Record.find()
-    .lean()
-    .then( //資料庫裡的每個項目的金額全部加總，帶入參數totalAmount
-      items => {
-        items.forEach(item=>{
-          totalAmount += item.amount
-        })
-        return totalAmount
-      }
-    )
-    .then(records => res.render('index', { records, totalAmount }))
-    .catch(error => console.log(error))
-    
-})
-
-//篩選功能
-app.get('/records/:id/sort', (req, res) => {
-  const id = req.params.id
-  let totalAmount = 0
-  Record.find({category: id})
-    .lean()
-    .then(items => {
-      items.forEach(item=>{
-        totalAmount += item.amount
-      })
-      return items
-    })
-    .then(records => res.render('index', { records, totalAmount, id }))
-    .catch(error => console.log(error))
-})
 
 
 //設定路由監聽器
