@@ -11,22 +11,30 @@ const PORT = process.env.PORT || 3000
 const routes = require('./routes')// 引用路由器
 require('./config/mongoose')
 
-usePassport(app)
+
 
 app.use(session({
   secret: 'ThisIsMySecret',
   resave: false,
   saveUninitialized: true
 }))
+usePassport(app)
 
-
-
-app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
-app.use(routes)// 將 request 導入路由器
+app.use((req, res, next) => {
+  // 你可以在這裡 console.log(req.user) 等資訊來觀察
+  res.locals.isAuthenticated = req.isAuthenticated()
+  res.locals.user = req.user
+  next()
+})
 
 //設定前端模板引擎
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
+
+app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
+app.use(routes)// 將 request 導入路由器
+
+
 
 //設定路由監聽器
 app.listen(PORT, () => {
