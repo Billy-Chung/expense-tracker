@@ -8,8 +8,11 @@ const RecordSchema = new Schema({
     categoryname:String,  
     date: String, //日期
     amount: Number, //金  
-    icon:String,    
-
+    month: {
+        type:Number,
+        required: true
+    },
+    shop:String
 })
 
 

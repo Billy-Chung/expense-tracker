@@ -12,7 +12,14 @@
 
     <div class="input-group mb-3 ">
       <div class="input-group-prepend">
-        <span class="input-group-text">日期</span>
+        <span class="input-group-text">月份</span>
+      </div>
+      <input type="text" class="form-control" name="month"  value="{{record.month}}">
+    </div>
+
+    <div class="input-group mb-3 ">
+      <div class="input-group-prepend">
+        <span class="input-group-text">顯示日期</span>
       </div>
       <input type="text" class="form-control"value="{{ record.date }}" name="date">
     </div>
@@ -30,6 +37,13 @@
         <option value="04">餐飲食品</option>
         <option value="05">其他</option>
       </select>
+    </div>
+
+    <div class="input-group mb-3 ">
+      <div class="input-group-prepend">
+        <span class="input-group-text">消費商家</span>
+      </div>
+      <input type="text" class="form-control"value="{{ record.shop }}" name="shop">
     </div>
 
     <div class="input-group mb-3 ">
