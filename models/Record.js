@@ -12,7 +12,13 @@ const RecordSchema = new Schema({
         type:Number,
         required: true
     },
-    shop:String
+    shop:String,
+    userId: {  // 加入關聯設定
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        index: true,
+        required: true
+    }
 })
 
 

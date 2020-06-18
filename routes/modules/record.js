@@ -11,10 +11,11 @@ router.get('/new', (req, res) => {
 
 //新增路由
 router.post('/', (req, res) => {
+    const userId = req.user._id
     if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {
         const { name, date, category, amount, month } = req.body
         let categoryname = newCategoryname(category)
-        return Record.create({ name, date, category, amount, categoryname, month })     // 存入資料庫
+        return Record.create({ name, date, category, amount, categoryname, month, userId })     // 存入資料庫
             .then(() => res.redirect('/')) // 新增完成後導回首頁
             .catch(error => console.log(error))
     }
@@ -26,9 +27,9 @@ router.post('/', (req, res) => {
 
 //進入ED路由
 router.get('/:id/edit', (req, res) => {
-    const id = req.params.id
-
-    return Record.findById(id)
+    const _id = req.params.id
+    const userId = req.user._id
+    return Record.findOne({ _id, userId})
         .lean()
         .then((record) => res.render('edit', { record }))
         .catch(error => console.log(error))
@@ -37,13 +38,15 @@ router.get('/:id/edit', (req, res) => {
 //儲存ED路由
 router.put('/:id', (req, res) => {
     if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {
-        const id = req.params.id
+        const userId = req.user._id
+        const _id = req.params.id
+        
         const name = req.body.name
         const date = req.body.date
         const category = req.body.category
         const amount = req.body.amount
         const month = req.body.month
-        return Record.findById(id)
+        return Record.findOne({ _id, userId })
             .then(record => {
                 record.name = name
                 record.date = date
@@ -55,20 +58,21 @@ router.put('/:id', (req, res) => {
             .then(() => res.redirect('/'))
             .catch(error => console.log(error))
     }
-    else{
+    else {
         const id = req.params.id
         return Record.findById(id)
-        .lean()
-        .then((record) => res.render('edit', { record }))
-        .catch(error => console.log(error))
+            .lean()
+            .then((record) => res.render('edit', { record }))
+            .catch(error => console.log(error))
     }
 
 })
 
 //刪除路由
 router.delete('/:id', (req, res) => {
-    const id = req.params.id
-    return Record.findById(id)
+    const userId = req.user._id
+    const _id = req.params.id
+    return Record.findOne({ _id, userId })
         .then(record => record.remove())
         .then(() => res.redirect('/'))
         .catch(error => console.log(error))

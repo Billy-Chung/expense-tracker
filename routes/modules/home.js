@@ -6,8 +6,9 @@ const Category = require('../../models/Category')//載入資料
 
 // 首頁
 router.get('/', (req, res) => {
+    const userId = req.user._id
     let totalAmount = 0
-    Record.find()
+    Record.find({userId })
         .lean()
         .then(items => {
             items.forEach(item => {
