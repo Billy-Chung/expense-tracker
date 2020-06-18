@@ -5,9 +5,10 @@ const record = require('./modules/record')
 const home = require('./modules/home')
 const users = require('./modules/users') 
 const { authenticator } = require('../middleware/auth')
+const auth = require('./modules/auth')
 
 
-
+router.use('/auth', auth)
 router.use('/users', users)
 router.use('/records', authenticator, record)
 router.use('/', authenticator, home)
