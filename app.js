@@ -7,6 +7,7 @@ const Record = require('./models/Record')//載入資料
 const Category = require('./models/Category')//載入資料
 const bodyParser = require('body-parser')// 引用 body-parser
 const methodOverride = require('method-override')// 載入 method-override
+const flash = require('connect-flash')
 const PORT = process.env.PORT || 3000
 const routes = require('./routes')// 引用路由器
 require('./config/mongoose')
@@ -19,11 +20,13 @@ app.use(session({
   saveUninitialized: true
 }))
 usePassport(app)
-
+app.use(flash())
 app.use((req, res, next) => {
   // 你可以在這裡 console.log(req.user) 等資訊來觀察
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user
+  res.locals.success_msg = req.flash('success_msg') 
+  res.locals.warning_msg = req.flash('warning_msg')
   next()
 })
 
