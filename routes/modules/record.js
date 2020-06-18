@@ -10,18 +10,26 @@ router.get('/new', (req, res) => {
 
 //新增路由
 router.post('/', (req, res) => {
+    if (!isNaN(req.body.amount)) {
+        const { name, date, category, amount } = req.body
+        return Record.create({ name, date, category, amount })     // 存入資料庫
+            .then(() => res.redirect('/')) // 新增完成後導回首頁
+            .catch(error => console.log(error))
+    }
+   else{
     const { name, date, category, amount } = req.body
-    return Record.create({ name, date, category, amount })     // 存入資料庫
-        .then(() => res.redirect('/')) // 新增完成後導回首頁
-        .catch(error => console.log(error))
+     return res.render('new' , { name, date,category, amount })
+   }
 })
 
 //進入ED路由
 router.get('/:id/edit', (req, res) => {
     const id = req.params.id
+    
+    console.log(categoryId)
     return Record.findById(id)
         .lean()
-        .then((record) => res.render('edit', { record }))
+        .then((record) => res.render('edit', { record,}))
         .catch(error => console.log(error))
 })
 
@@ -46,7 +54,7 @@ router.put('/:id', (req, res) => {
 
 //刪除路由
 router.delete('/:id', (req, res) => {
-    const id = req.params.id        
+    const id = req.params.id
     return Record.findById(id)
         .then(record => record.remove())
         .then(() => res.redirect('/'))
