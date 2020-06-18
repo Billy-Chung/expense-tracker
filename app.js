@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000
 const routes = require('./routes')// 引用路由器
 require('./config/mongoose')
 
+usePassport(app)
 
 app.use(session({
   secret: 'ThisIsMySecret',
@@ -18,7 +19,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-usePassport(app)
+
 
 app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(routes)// 將 request 導入路由器
