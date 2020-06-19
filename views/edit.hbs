@@ -1,9 +1,9 @@
 <div class="container h-200 mt-5 col-8">
   <form action="/records/{{ record._id }}?_method=put" method="post" class="needs-validation">
-
+    {{> message}}
     <h3>請修改你的支出</h3>
 
-   <div class="input-group mb-3 ">
+    <div class="input-group mb-3 ">
       <div class="input-group-prepend">
         <span class="input-group-text">名稱</span>
       </div>
@@ -14,14 +14,14 @@
       <div class="input-group-prepend">
         <span class="input-group-text">月份</span>
       </div>
-      <input type="text" class="form-control" name="month"  value="{{record.month}}">
+      <input type="text" class="form-control" name="month" value="{{record.month}}">
     </div>
 
     <div class="input-group mb-3 ">
       <div class="input-group-prepend">
         <span class="input-group-text">顯示日期</span>
       </div>
-      <input type="text" class="form-control"value="{{ record.date }}" name="date">
+      <input type="text" class="form-control" value="{{ record.date }}" name="date">
     </div>
 
     <div class="input-group mb-3 ">
@@ -30,7 +30,7 @@
       </div>
       <select class="form-control" value="{{ record.categoryname }}" name="category">
 
-        <option value="{{ record.category }}" selected >{{ record.categoryname }}</option>        
+        <option value="{{ record.category }}" selected>{{ record.categoryname }}</option>
         <option value="01">家居物業</option>
         <option value="02">交通出行</option>
         <option value="03">休閒娛樂</option>
@@ -43,7 +43,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text">消費商家</span>
       </div>
-      <input type="text" class="form-control"value="{{ record.shop }}" name="shop">
+      <input type="text" class="form-control" value="{{ record.shop }}" name="shop">
     </div>
 
     <div class="input-group mb-3 ">
@@ -52,7 +52,7 @@
       </div>
       <input type="text" class="form-control" value="{{ record.amount }}" name="amount">
     </div>
-    
+
     <button type="submit" class="btn btn-info mb-5">儲存</button>
   </form>
 </div>

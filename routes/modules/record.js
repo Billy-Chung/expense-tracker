@@ -12,7 +12,7 @@ router.get('/new', (req, res) => {
 //新增路由
 router.post('/', (req, res) => {
     const userId = req.user._id
-    if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {
+    if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {        
         const { name, date, category, amount, month } = req.body
         let categoryname = newCategoryname(category)
         return Record.create({ name, date, category, amount, categoryname, month, userId })     // 存入資料庫
@@ -20,8 +20,10 @@ router.post('/', (req, res) => {
             .catch(error => console.log(error))
     }
     else {
+        const errors = []
+        errors.push({ message: '輸入的月份與金額必須是數字!!' })
         const { name, date, category, amount } = req.body
-        return res.render('new', { name, date, category, amount })
+        return res.render('new', { name, date, category, amount, errors })
     }
 })
 
@@ -39,8 +41,7 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
     if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {
         const userId = req.user._id
-        const _id = req.params.id
-        
+        const _id = req.params.id        
         const name = req.body.name
         const date = req.body.date
         const category = req.body.category
@@ -60,9 +61,11 @@ router.put('/:id', (req, res) => {
     }
     else {
         const id = req.params.id
+        const errors = []
+        errors.push({ message: '輸入的月份與金額必須是數字!!' })
         return Record.findById(id)
             .lean()
-            .then((record) => res.render('edit', { record }))
+            .then((record) => res.render('edit', { record, errors}))
             .catch(error => console.log(error))
     }
 

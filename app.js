@@ -3,17 +3,14 @@ const app = express()
 const session = require('express-session')
 const usePassport = require('./config/passport')
 const exphbs = require('express-handlebars')
-const Record = require('./models/Record')//載入資料
-const Category = require('./models/Category')//載入資料
 const bodyParser = require('body-parser')// 引用 body-parser
 const methodOverride = require('method-override')// 載入 method-override
 const flash = require('connect-flash')
-const PORT = process.env.PORT
 const routes = require('./routes')// 引用路由器
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-
+const PORT = process.env.PORT
 require('./config/mongoose')
 
 
