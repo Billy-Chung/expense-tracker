@@ -13,13 +13,12 @@ if (process.env.NODE_ENV !== 'production') {
 const PORT = process.env.PORT
 require('./config/mongoose')
 
-
-
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }))
+
 usePassport(app)
 app.use(flash())
 app.use((req, res, next) => {
@@ -37,8 +36,6 @@ app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }), methodOverride('_method'))// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
 app.use(routes)// 將 request 導入路由器
-
-
 
 //設定路由監聽器
 app.listen(PORT, () => {

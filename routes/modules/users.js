@@ -4,7 +4,6 @@ const User = require('../../models/user')
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
 
-
 router.get('/login', (req, res) => {
   res.render('login')
 })
@@ -65,8 +64,5 @@ router.get('/logout', (req, res) => {
   req.flash('success_msg', '你已經成功登出。')
   res.redirect('/users/login')
 })
-
-
-
 
 module.exports = router

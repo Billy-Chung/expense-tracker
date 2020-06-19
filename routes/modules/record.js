@@ -15,8 +15,8 @@ router.post('/', (req, res) => {
     if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {        
         const { name, date, category, amount, month } = req.body
         let categoryname = newCategoryname(category)
-        return Record.create({ name, date, category, amount, categoryname, month, userId })     // 存入資料庫
-            .then(() => res.redirect('/')) // 新增完成後導回首頁
+        return Record.create({ name, date, category, amount, categoryname, month, userId })
+            .then(() => res.redirect('/')) 
             .catch(error => console.log(error))
     }
     else {
@@ -131,8 +131,5 @@ let newCategoryname = (category) => {
         return '其他'
     }
 }
-
-
-
 
 module.exports = router

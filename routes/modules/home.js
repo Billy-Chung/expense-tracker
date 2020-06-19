@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const Record = require('../../models/Record')//載入資料
-const Category = require('../../models/Category')//載入資料
+const Record = require('../../models/Record')
+const Category = require('../../models/Category')
 
 
 // 首頁
