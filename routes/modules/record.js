@@ -112,6 +112,13 @@ router.get('/sort', (req, res) => {
         .then(items => {
             items.forEach(item => {
                 totalAmount += item.amount
+                let cat_id = item.category
+                Category.find({ id: cat_id }).lean().then(
+                    xxx => {
+                        item.icon = xxx[0].icon
+                        return item
+                    }
+                )
             })
             return items
         })        
@@ -124,6 +131,13 @@ router.get('/sort', (req, res) => {
         .then(items => {
             items.forEach(item => {
                 totalAmount += item.amount
+                let cat_id = item.category
+                Category.find({ id: cat_id }).lean().then(
+                    xxx => {
+                        item.icon = xxx[0].icon
+                        return item
+                    }
+                )
             })
             return items
         })        
@@ -136,6 +150,13 @@ router.get('/sort', (req, res) => {
         .then(items => {
             items.forEach(item => {
                 totalAmount += item.amount
+                let cat_id = item.category
+                Category.find({ id: cat_id }).lean().then(
+                    xxx => {
+                        item.icon = xxx[0].icon
+                        return item
+                    }
+                )
             })
             return items
         })        
