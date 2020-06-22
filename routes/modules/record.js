@@ -12,12 +12,21 @@ router.get('/new', (req, res) => {
 //新增路由
 router.post('/', (req, res) => {
     const userId = req.user._id
-    if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {        
-        const { name, date, category, amount, month } = req.body
-        let categoryname = newCategoryname(category)
-        return Record.create({ name, date, category, amount, categoryname, month, userId })
-            .then(() => res.redirect('/')) 
-            .catch(error => console.log(error))
+    if (!isNaN(req.body.amount)) {
+        const { name, date, category, amount } = req.body
+        if (date.substring(5, 7).charAt(1) === '/') {
+            const errors = []
+            errors.push({ message: '輸入的日期必須為xxxx/xx/xx格式!!' })
+            return res.render('new', { name, date, category, amount, errors })
+        }
+        else {
+            const month = date.substring(5, 7)
+            const categoryname = newCategoryname(category)            
+            return Record.create({ name, date, category, amount, categoryname, month, userId })
+                .then(() => res.redirect('/'))
+                .catch(error => console.log(error))
+        }
+
     }
     else {
         const errors = []
@@ -31,7 +40,7 @@ router.post('/', (req, res) => {
 router.get('/:id/edit', (req, res) => {
     const _id = req.params.id
     const userId = req.user._id
-    return Record.findOne({ _id, userId})
+    return Record.findOne({ _id, userId })
         .lean()
         .then((record) => res.render('edit', { record }))
         .catch(error => console.log(error))
@@ -39,25 +48,35 @@ router.get('/:id/edit', (req, res) => {
 
 //儲存ED路由
 router.put('/:id', (req, res) => {
-    if (!isNaN(req.body.amount) && !isNaN(req.body.month)) {
+    if (!isNaN(req.body.amount)) {
         const userId = req.user._id
-        const _id = req.params.id        
+        const _id = req.params.id
         const name = req.body.name
         const date = req.body.date
         const category = req.body.category
         const amount = req.body.amount
-        const month = req.body.month
-        return Record.findOne({ _id, userId })
-            .then(record => {
-                record.name = name
-                record.date = date
-                record.category = category
-                record.amount = amount
-                record.month = month
-                return record.save()
-            })
-            .then(() => res.redirect('/'))
-            .catch(error => console.log(error))
+
+        if (date.substring(5, 7).charAt(1) === '/') {
+            const errors = []
+            errors.push({ message: '輸入的日期必須為xxxx/xx/xx格式!!' })
+            return Record.findOne({ _id, userId })
+            .lean()
+            .then((record) => res.render('edit', { errors, record }))
+        }
+        else {
+            const month = date.substring(5, 7)
+            return Record.findOne({ _id, userId })
+                .then(record => {
+                    record.name = name
+                    record.date = date
+                    record.category = category
+                    record.amount = amount
+                    record.month = month
+                    return record.save()
+                })
+                .then(() => res.redirect('/'))
+                .catch(error => console.log(error))
+        }
     }
     else {
         const id = req.params.id
@@ -65,7 +84,7 @@ router.put('/:id', (req, res) => {
         errors.push({ message: '輸入的月份與金額必須是數字!!' })
         return Record.findById(id)
             .lean()
-            .then((record) => res.render('edit', { record, errors}))
+            .then((record) => res.render('edit', { record, errors }))
             .catch(error => console.log(error))
     }
 
@@ -114,17 +133,17 @@ router.get('/:id/month', (req, res) => {
 })
 
 
-let newCategoryname = (category) => {
-    if (category === 1) {
+let newCategoryname = (category) => {  
+    if (category === '1') {
         return '家居物業'
     }
-    else if (category === 2) {
+    else if (category === '2') {
         return '交通出行'
     }
-    else if (category === 3) {
+    else if (category === '3') {
         return '休閒娛樂'
     }
-    else if (category === 4) {
+    else if (category === '4') {
         return '餐飲食品'
     }
     else {
