@@ -1,8 +1,42 @@
 <div class="list-group">
   <div class="container">
     <div class="list-group-item mx-auto border-0" style="width: 600px;">
+      {{> message}}
+      <div class="row" id="search-bar">
+        <div class="col-12">
+          <form action="/records/sort">
+            <select class="form-control btn-outline-secondary" name='whichCategory'>
+              <option value="0">類別</option>
+              <option Value="01">家居物業</option>
+              <option value="02">交通出行</option>
+              <option value="03">休閒娛樂</option>
+              <option value="04">餐飲食品</option>
+              <option value="05">其他</option>
+            </select>
 
-       <select class="form-control btn-outline-secondary" onchange="location = this.value">
+            <select class="form-control btn-outline-secondary" name='whichMonth'>
+              <option value="0">月份</option>
+              <option Value="1">1月</option>
+              <option value="2">2月</option>
+              <option value="3">3月</option>
+              <option value="4">4月</option>
+              <option value="5">5月</option>
+              <option value="6">6月</option>
+              <option value="7">7月</option>
+              <option value="8">8月</option>
+              <option value="9">9月</option>
+              <option value="10">10月</option>
+              <option value="11">11月</option>
+              <option value="12">12月</option>
+            </select>
+
+            <button class="form-control btn-outline-secondary" type="submit" id="search-button">Search</button>
+          </form>
+        </div>
+      </div>
+
+
+      {{!-- <select class="form-control btn-outline-secondary" onchange="location = this.value">
         <option value="/">類別</option>
         <option Value="/records/01/sort">家居物業</option>
         <option value="/records/02/sort">交通出行</option>
@@ -11,7 +45,7 @@
         <option value="/records/05/sort">其他</option>
       </select>
 
-       <select class="form-control btn-outline-secondary" onchange="location = this.value">
+      <select class="form-control btn-outline-secondary" onchange="location = this.value">
         <option value="/">月份</option>
         <option Value="/records/1/month">1月</option>
         <option value="/records/2/month">2月</option>
@@ -25,14 +59,14 @@
         <option value="/records/10/month">10月</option>
         <option value="/records/11/month">11月</option>
         <option value="/records/12/month">12月</option>
-      </select>
+      </select> --}}
 
       <div class="d-flex justify-content-center align-items-center">
         <h4 class="mr-4">總金額：</h4>
         <h1 class="display-3">{{ totalAmount }}</h1>
       </div>
 
-     
+
     </div>
 
     {{#each records }}
@@ -47,19 +81,19 @@
             </h3>
             <h2>
               {{ this.amount }}
-            </h2>             
+            </h2>
           </div>
           <h3 class="ml-1 font-weight-bolder">消費商家:{{this.shop}}</h3>
-          <span class="ml-1 font-weight-bolder">{{this.date}}</span>         
+          <span class="ml-1 font-weight-bolder">{{this.date}}</span>
         </div>
 
-        <div class="col-1" class="d-flex justify-content-end" >
+        <div class="col-1" class="d-flex justify-content-end">
           <a class="btn btn-success mb-2" href="./records/{{ this._id }}/edit" style="width: 80px;">
-            <i >編輯</i>
+            <i>編輯</i>
           </a>
           <form action="./records/{{ this._id }}?_method=DELETE" method="POST">
             <button class="btn btn-danger text-center" type="submit" style="width: 80px;">
-              <i >刪除</i>
+              <i>刪除</i>
             </button>
           </form>
         </div>

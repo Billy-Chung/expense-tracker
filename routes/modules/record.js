@@ -102,35 +102,71 @@ router.delete('/:id', (req, res) => {
 
 
 //篩選功能
-router.get('/:id/sort', (req, res) => {
-    const id = req.params.id
-    let totalAmount = 0
-    Record.find({ category: id })
+router.get('/sort', (req, res) => {
+    const id = req.query.whichCategory
+    const whichmonth = req.query.whichMonth   
+    let totalAmount = 0   
+    if(whichmonth === '0' && id !== '0'){
+        Record.find({ category: id  })
         .lean()
         .then(items => {
             items.forEach(item => {
                 totalAmount += item.amount
             })
             return items
-        })
+        })        
         .then(records => res.render('index', { records, totalAmount }))
         .catch(error => console.log(error))
+    }
+    else if(id === '0' && whichmonth !== '0'){
+        Record.find({ month: whichmonth })
+        .lean()
+        .then(items => {
+            items.forEach(item => {
+                totalAmount += item.amount
+            })
+            return items
+        })        
+        .then(records => res.render('index', { records, totalAmount }))
+        .catch(error => console.log(error))
+    }
+    else if (id !== '0' && whichmonth !== '0'){
+        Record.find({ month: whichmonth, category: id })
+        .lean()
+        .then(items => {
+            items.forEach(item => {
+                totalAmount += item.amount
+            })
+            return items
+        })        
+        .then(records => res.render('index', { records, totalAmount }))
+        .catch(error => console.log(error))
+    }
+    else{
+        const userId = req.user._id
+        const errors = []
+        errors.push({ message: '輸入的月份與種類在查詢!!' })
+        Record.find({userId })
+        .lean()
+        .then(items => {
+            items.forEach(item => {
+                totalAmount += item.amount
+                let cat_id = item.category
+                Category.find({ id: cat_id }).lean().then(
+                    xxx => {
+                        item.icon = xxx[0].icon
+                        return item
+                    }
+                )
+            })
+            return items
+        }
+        )
+        .then(records => res.render('index', { records, totalAmount,errors }))
+     }
+    
 })
 
-router.get('/:id/month', (req, res) => {
-    const id = req.params.id
-    let totalAmount = 0
-    Record.find({ month: id })
-        .lean()
-        .then(items => {
-            items.forEach(item => {
-                totalAmount += item.amount
-            })
-            return items
-        })
-        .then(records => res.render('index', { records, totalAmount }))
-        .catch(error => console.log(error))
-})
 
 
 let newCategoryname = (category) => {  
